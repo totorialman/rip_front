@@ -12,7 +12,7 @@ interface BreadCrumbsProps {
 
 export const BreadCrumbs: React.FC<BreadCrumbsProps> = ({ crumbs }) => {
   return (
-    <ul className="breadcrumbs" style={{ listStyleType: 'none', display: 'flex', padding: 0 }}>
+    <ul className="breadcrumbs" style={{ listStyleType: 'none', display: 'flex', padding: 0, marginLeft: '3rem' }}>
       <li>
         <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>Главная</Link>
       </li>

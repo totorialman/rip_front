@@ -8,21 +8,21 @@ import '../App.css';
 const VMDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const [vm, setVm] = useState<VMData | null>(null);
-    const [loading, setLoading] = useState<boolean>(true); // Новое состояние для отслеживания загрузки
+    const [loading, setLoading] = useState<boolean>(true); 
 
     useEffect(() => {
         const fetchVM = async () => {
             if (id) {
                 const data = await fetchVMByIdFromApi(parseInt(id));
                 setVm(data || null);
-                setLoading(false); // Устанавливаем состояние загрузки в false после получения данных
+                setLoading(false); 
             }
         };
         fetchVM();
     }, [id]);
 
     if (loading) {
-        return <Spinner animation="border" />; // Показываем индикатор загрузки
+        return <Spinner animation="border" />; 
     }
 
     if (!vm) {
