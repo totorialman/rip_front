@@ -41,7 +41,7 @@ export const fetchVMListFromApi = async (maxPrice: number): Promise<VMData[]> =>
         }
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
-        return mockData; 
+        return mockData.filter(vm => vm.price <= maxPrice); 
     }
 };
 
@@ -58,8 +58,3 @@ export const fetchVMByIdFromApi = async (id: number): Promise<VMData | undefined
         return mockData.find(vm => vm.id === id); 
     }
 };
-
-
-export const fetchVMList = async (): Promise<VMData[]> => new Promise(resolve => setTimeout(() => resolve(mockData), 500));
-
-export const fetchVMById = async (id: number): Promise<VMData | undefined> => new Promise(resolve => setTimeout(() => resolve(mockData.find(vm => vm.id === id)), 500));

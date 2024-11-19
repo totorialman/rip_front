@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector} from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
 import PriceFilter from '../components/PriceFilter';
 import MachineCard from '../components/MachineCard';
+import { RootState } from '../store';
 import { VMData, fetchVMListFromApi } from '../services/api';
 import '../App.css';
 
 const MachinesPage: React.FC = () => {
+    const maxPrice = useSelector((state: RootState) => state.filter.maxPrice); // maxPrice из Redux
     const [machines, setMachines] = useState<VMData[]>([]);
-    const [maxPrice, setMaxPrice] = useState(100000);
+    
 
     useEffect(() => {
         const loadMachines = async () => {
@@ -29,10 +32,12 @@ const MachinesPage: React.FC = () => {
         <Container className="custom-container">
             <h2>Конфигурации виртуальных машин</h2>
             <Row>
-                <Col md={4}><PriceFilter maxPrice={maxPrice} onPriceChange={setMaxPrice} /></Col>
+                <Col md={4}>
+                    <PriceFilter />
+                </Col>
             </Row>
             <Row>
-                {Array.isArray(machines) && machines.length > 0 ? (
+                {machines.length > 0 ? (
                     machines.map(vm => (
                         <Col key={vm.id} md={4} className="my-3 px-3">
                             <MachineCard vm={vm} />
@@ -47,3 +52,5 @@ const MachinesPage: React.FC = () => {
 };
 
 export default MachinesPage;
+
+
