@@ -1,7 +1,7 @@
 {
   "name": "Tile Notes",
   "short_name": "Tile Notes",
-  "start_url": "/",
+  "start_url": "/rip_front/",
   "display": "standalone",
   "background_color": "#fdfdfd",
   "theme_color": "#db4938",
