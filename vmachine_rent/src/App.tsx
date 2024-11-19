@@ -19,7 +19,6 @@ const MainRoutes: React.FC = () => {
     const location = useLocation();
     const paths = location.pathname.split('/').filter(Boolean);
 
-    // Массив крошек, который используется в BreadCrumbs
     const crumbs = paths.map((path, index) => {
         let label = path.charAt(0).toUpperCase() + path.slice(1);
         if (path === 'machines') {
