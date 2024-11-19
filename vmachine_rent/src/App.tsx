@@ -8,7 +8,7 @@ import MachineDetails from './pages/MachineDetails';
 
 const App: React.FC = () => {
     return (
-        <Router>
+        <Router basename="/rip-front">
             <AppNavbar />
             <MainRoutes />
         </Router>
