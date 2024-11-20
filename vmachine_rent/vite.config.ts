@@ -13,8 +13,8 @@ export default defineConfig({
       },
       
       manifest: {
-        "name": "Tile Notes",
-        "short_name": "Tile Notes",
+        "name": "VMachines",
+        "short_name": "VMachines",
         "start_url": "/rip_front/",
         "display": "standalone",
         "background_color": "#fdfdfd",
@@ -22,38 +22,18 @@ export default defineConfig({
         "orientation": "portrait-primary",
         "icons": [
           {
-            "src": "/logo-192.png",
-            "type": "image/png",
-            "sizes": "192x192",
-            "purpose": "any"
-          },
-          {
             "src": "/logo-512.png",
             "type": "image/png",
             "sizes": "512x512",
             "purpose": "any"
           }
         ],
-        "screenshots": [
-          {
-            "src": "/screenshot-desktop.png",
-            "type": "image/png",
-            "sizes": "1280x720",
-            "form_factor": "wide"
-          },
-          {
-            "src": "/screenshot-mobile.png",
-            "type": "image/png",
-            "sizes": "720x1280",
-            "form_factor": "narrow"
-          }
-        ]
       }
     })
   ],
-  base: "/rip_front", // Этот параметр сохраняет вашу базовую настройку для развертывания
+  base: "/rip_front", 
   server: {
-    host: '0.0.0.0',  // Слушать на всех интерфейсах
+    host: '0.0.0.0',  
     proxy: {
       "/api": {
         target: "http://192.168.0.63:8000",

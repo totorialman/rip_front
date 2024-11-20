@@ -21,12 +21,8 @@ const MachineCard: React.FC<MachineCardProps> = ({ vm }) => (
         </Card.Text>
         <Card.Text className="text-end mt-2 fs-5">
         <b>{vm.price} ₽/мес</b>
+        </Card.Text>  
         </Card.Text>
-           
-            
-        </Card.Text>
-
-        
         <div className="d-flex mt-auto gap-2"> 
             <Link to={`/machines/${vm.id}`} className="flex-grow-2"> 
                 <Button variant="primary" >Подробнее</Button>
