@@ -1,0 +1,18 @@
+{
+    "name": "VMachines",
+    "short_name": "VMachines",
+    "start_url": "/rip_front/",
+    "display": "standalone",
+    "background_color": "#fdfdfd",
+    "theme_color": "#db4938",
+    "orientation": "portrait-primary",
+    "icons": [
+      {
+        "src": "logo-512.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any"
+      }
+    ]
+  }
+  
