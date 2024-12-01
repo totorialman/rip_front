@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-
+import {api_proxy_addr, dest_root} from "./target_config"
 
 export default defineConfig({
   plugins: [
@@ -31,12 +31,12 @@ export default defineConfig({
       }
     })
   ],
-  base: "/rip_front", 
+  base: dest_root, 
   server: {
     host: '0.0.0.0',  
     proxy: {
       "/api": {
-        target: "http://192.168.187.207:8000",
+        target: api_proxy_addr,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/"),
       },

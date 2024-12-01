@@ -1,75 +1,48 @@
-  import React, { useEffect } from "react";
-  import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
-  import AppNavbar from "./components/Navbar";
-  import { BreadCrumbs } from "./components/Breadcrumbs";
-  import HomePage from "./pages/HomePage";
-  import MachinesPage from "./pages/MachinesPage";
-  import MachineDetails from "./pages/MachineDetails";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import AppNavbar from "./components/Navbar";
+import { BreadCrumbs } from "./components/Breadcrumbs";
+import HomePage from "./pages/HomePage";
+import MachinesPage from "./pages/MachinesPage";
+import MachineDetails from "./pages/MachineDetails";
+import { dest_root } from "../target_config";
 
-  const App: React.FC = () => {
-    useEffect(() => {
-      // Проверяем, запущено ли приложение в среде Tauri
-      if (typeof window !== "undefined" && window.__TAURI__?.tauri) {
-        const { invoke } = window.__TAURI__.tauri;
+const App: React.FC = () => {
+  return (
+    <Router basename={dest_root}>
+      <AppNavbar />
+      <MainRoutes />
+    </Router>
+  );
+};
 
-        try {
-          invoke("tauri", { cmd: "create" })
-            .then(() => console.log("Tauri launched"))
-            .catch((err: any) => console.error("Error launching Tauri:", err));
-        } catch (err) {
-          console.error("Tauri is unavailable:", err);
-        }
+const MainRoutes: React.FC = () => {
+  const location = useLocation();
+  const paths = location.pathname.split("/").filter(Boolean);
 
-        return () => {
-          try {
-            invoke("tauri", { cmd: "close" })
-              .then(() => console.log("Tauri closed"))
-              .catch((err: any) => console.error("Error closing Tauri:", err));
-          } catch (err) {
-            console.error("Tauri is unavailable on close:", err);
-          }
-        };
-      } else {
-        console.log("Running in browser environment, Tauri is not available.");
-      }
-    }, []);
+  const crumbs = paths.map((path, index) => {
+    let label = path.charAt(0).toUpperCase() + path.slice(1);
+    if (path === "machines") {
+      label = "Виртуальные машины";
+    } else if (path === "home") {
+      label = "Главная";
+    }
 
-    return (
-      <Router basename="/rip_front">
-        <AppNavbar />
-        <MainRoutes />
-      </Router>
-    );
-  };
+    return {
+      label,
+      path: `/${paths.slice(0, index + 1).join("/")}`,
+    };
+  });
 
-  const MainRoutes: React.FC = () => {
-    const location = useLocation();
-    const paths = location.pathname.split("/").filter(Boolean);
+  return (
+    <div>
+      <BreadCrumbs crumbs={crumbs} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/machines" element={<MachinesPage />} />
+        <Route path="/machines/:id" element={<MachineDetails />} />
+      </Routes>
+    </div>
+  );
+};
 
-    const crumbs = paths.map((path, index) => {
-      let label = path.charAt(0).toUpperCase() + path.slice(1);
-      if (path === "machines") {
-        label = "Виртуальные машины";
-      } else if (path === "home") {
-        label = "Главная";
-      }
-
-      return {
-        label,
-        path: `/${paths.slice(0, index + 1).join("/")}`,
-      };
-    });
-
-    return (
-      <div>
-        <BreadCrumbs crumbs={crumbs} />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/machines" element={<MachinesPage />} />
-          <Route path="/machines/:id" element={<MachineDetails />} />
-        </Routes>
-      </div>
-    );
-  };
-
-  export default App;
+export default App;

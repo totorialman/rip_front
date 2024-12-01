@@ -9,13 +9,20 @@
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../../dist"
   },
+  
+  "plugins": {
+        "http": {
+          "enabled": true
+        }
+    },
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
         "title": "vmachines",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "devtools": true
       }
     ],
     "security": {

@@ -1,3 +1,5 @@
+import { dest_api } from "../../target_config"
+
 export interface VMData {
     id: number;
     name: string;
@@ -27,9 +29,10 @@ const mockData: VMData[] = [
     {'id': 9, 'name': 'HP C32-M180-D1024', 'price': 89315, 'description': 'Для 3D-моделирования, рендеринга, ML и аналитики.', 'vcpu': '32 ядра', 'ram': '180 ГБ', 'ssd': '1024 ГБ', 'url': '', 'description_tech': 'Флагманский сервер с 32 ядрами vcpu (2.5 ГГц), 180 ГБ DDR4, 1024 ГБ ssd, подходит для масштабных вычислительных и аналитических задач.'},
 ];
 
+
 export const fetchVMListFromApi = async (maxPrice: number): Promise<VMData[]> => {
     try {
-        const response = await fetch(`/api/vmachines/?vmachine_price=${maxPrice}`);
+        const response = await fetch(`${dest_api}/vmachines/?vmachine_price=${maxPrice}`);
         if (!response.ok) {
             throw new Error('Сетевая ошибка');
         }
@@ -47,7 +50,7 @@ export const fetchVMListFromApi = async (maxPrice: number): Promise<VMData[]> =>
 
 export const fetchVMByIdFromApi = async (id: number): Promise<VMData | undefined> => {
     try {
-        const response = await fetch(`/api/vmachines/${id}/`); 
+        const response = await fetch(`${dest_api}/vmachines/${id}/`); 
         if (!response.ok) {
             throw new Error('Сетевая ошибка');
         }
