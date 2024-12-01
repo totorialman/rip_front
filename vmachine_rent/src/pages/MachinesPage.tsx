@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useFilter } from '../context/FilterContext';  // Импортируем хук
 import PriceFilter from '../components/PriceFilter';
 import MachineCard from '../components/MachineCard';
-import { RootState } from '../store';
 import { VMData, fetchVMListFromApi } from '../services/api';
-import '../App.css'; 
+import '../App.css';
 
 const MachinesPage: React.FC = () => {
-    const maxPrice = useSelector((state: RootState) => state.filter.maxPrice); 
+    const { state} = useFilter(); // Получаем состояние и dispatch из контекста
+    const { maxPrice } = state; // Достаем maxPrice из состояния
     const [machines, setMachines] = useState<VMData[]>([]);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const MachinesPage: React.FC = () => {
             }
         };
         loadMachines();
-    }, [maxPrice]); 
+    }, [maxPrice]); // Перезапуск загрузки при изменении maxPrice
 
     return (
         <Container>
@@ -39,7 +39,6 @@ const MachinesPage: React.FC = () => {
                 {machines.length > 0 ? (
                     machines.map(vm => (
                         <Col key={vm.id} xs={12} sm={6} lg={4} className="my-3">
-                            {/* xs=12 (1 карточка), sm=6 (2 карточки), lg=4 (3 карточки) */}
                             <MachineCard vm={vm} />
                         </Col>
                     ))

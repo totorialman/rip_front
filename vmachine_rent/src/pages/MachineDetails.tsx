@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Card, Button, Spinner } from 'react-bootstrap';
+import { Card, Spinner } from 'react-bootstrap';
 import { VMData, fetchVMByIdFromApi } from '../services/api';
 import image from "../services/DefaultImage.png";
 import '../App.css';
@@ -47,7 +47,7 @@ const VMDetailPage = () => {
                     <Card.Text>
                         <strong>Стоимость: {vm.price} ₽/мес</strong>
                     </Card.Text>
-                    <Button variant="primary">Арендовать</Button>
+                    {/*<Button variant="primary">Арендовать</Button>*/}
                 </Card.Body>
             </Card>
         </div>

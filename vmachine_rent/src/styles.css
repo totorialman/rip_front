@@ -1,7 +1,12 @@
 
   
   .custom-container {
-    padding-left: 10rem; /* Увеличьте по необходимости */
+    padding-left: 10rem; 
     padding-right: 10rem;
   }
   
+  body .btn-primary2 {
+    background-color: #0d65e9;
+    border: 1px solid #0d65e9;
+    color: white;
+  }

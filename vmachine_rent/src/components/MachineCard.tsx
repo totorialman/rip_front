@@ -25,9 +25,9 @@ const MachineCard: React.FC<MachineCardProps> = ({ vm }) => (
         </Card.Text>
         <div className="d-flex mt-auto gap-2"> 
             <Link to={`/machines/${vm.id}`} className="flex-grow-2"> 
-                <Button variant="primary" >Подробнее</Button>
+                <Button variant="primary" className="btn-primary2" >Подробнее</Button>
             </Link>
-            <Button variant="primary" className="flex-grow-1">Добавить</Button> 
+            {/* {<Button variant="primary" className="flex-grow-1">Добавить</Button>}  */}
         </div>
     </Card.Body>
 </Card>
