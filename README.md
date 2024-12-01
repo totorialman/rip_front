@@ -9,3 +9,5 @@
 # [Фронтенд](https://github.com/totorialman/rip_front)
 - [React (лаб 5)](https://github.com/totorialman/rip_front/tree/React)
 - [PWE (лаб 6)](https://github.com/totorialman/rip_front/tree/useContext%2C-useReducer)
+- [React, redux, auth (лаб 7)](https://github.com/totorialman/rip_front/tree/React-redux-auth)
+
