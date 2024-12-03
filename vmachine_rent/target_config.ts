@@ -1,4 +1,4 @@
-const target_tauri = true
+const target_tauri = false
 
 export const api_proxy_addr = "http://192.168.74.207:8000"
 export const img_proxy_addr = "http://192.168.74.207:9000"
