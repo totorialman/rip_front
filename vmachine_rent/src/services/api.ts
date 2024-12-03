@@ -1,4 +1,5 @@
 import { dest_api } from "../../target_config"
+import { api } from '../api'
 
 export interface VMData {
     id: number;
@@ -30,23 +31,20 @@ const mockData: VMData[] = [
 ];
 
 
-export const fetchVMListFromApi = async (maxPrice: number): Promise<VMData[]> => {
+export const fetchVMListFromApi = async (maxPrice: number): Promise<any> => {
     try {
-        const response = await fetch(`${dest_api}/vmachines/?vmachine_price=${maxPrice}`);
-        if (!response.ok) {
-            throw new Error('Сетевая ошибка');
-        }
-        const data = await response.json();
-        if (Array.isArray(data.vmachines)) {
-            return data.vmachines; 
-        } else {
-            throw new Error('Некорректный формат данных');
-        }
+        // Вызов метода vmachinesList с передачей query-параметра vmachine_price
+        const response = await api.vmachines.vmachinesList({
+            vmachine_price: maxPrice, // Параметр передается в функцию
+        });
+        
+        return response.data?.vmachines || []; // Возвращаем полученные данные или пустой массив, если vmachines отсутствует
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
-        return mockData.filter(vm => vm.price <= maxPrice); 
+        return mockData.filter(vm => vm.price <= maxPrice); // Возвращаем mockData в случае ошибки
     }
 };
+
 
 export const fetchVMByIdFromApi = async (id: number): Promise<VMData | undefined> => {
     try {

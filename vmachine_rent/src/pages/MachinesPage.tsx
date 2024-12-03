@@ -7,7 +7,7 @@ import { VMData, fetchVMListFromApi } from '../services/api';
 import '../App.css';
 
 const MachinesPage: React.FC = () => {
-    const { state} = useFilter(); // Получаем состояние и dispatch из контекста
+    const { state} = useFilter(); 
     const { maxPrice } = state; // Достаем maxPrice из состояния
     const [machines, setMachines] = useState<VMData[]>([]);
 

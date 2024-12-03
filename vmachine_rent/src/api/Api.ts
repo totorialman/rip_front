@@ -803,11 +803,33 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/vmachines/
      * @secure
      */
-    vmachinesList: (params: RequestParams = {}) =>
-      this.request<void, any>({
+    vmachinesList: (
+      query?: {
+        /** Filter virtual machines by price. Only services with price <= vmachine_price will be returned. */
+        vmachine_price?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          /** List of active virtual machine services */
+          vmachines?: {
+            id?: number;
+            name?: string;
+            price?: number;
+          }[];
+          /** ID of the first draft request, if any */
+          rent_id?: number;
+          /** Count of virtual machines in the draft request */
+          vmachine_count?: number;
+        },
+        void
+      >({
         path: `/vmachines/`,
         method: "GET",
+        query: query,
         secure: true,
+        format: "json",
         ...params,
       }),
 
