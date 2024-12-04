@@ -172,6 +172,7 @@ export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "pa
   format?: ResponseType;
   /** request body */
   body?: unknown;
+  credentials?: RequestCredentials;
 }
 
 export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
@@ -331,6 +332,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<User, any>({
         path: `/login/`,
         method: "POST",
+        credentials: "include",
         body: data,
         secure: true,
         format: "json",
@@ -346,7 +348,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/logout/
      * @secure
      */
-    logoutDelete: (data: User, params: RequestParams = {}) =>
+    logoutDelete: (data?: User, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/logout/`,
         method: "DELETE",
@@ -380,11 +382,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/register/{id}/
      * @secure
      */
-    registerUpdate: (id: string, params: RequestParams = {}) =>
+    registerUpdate: (pk: string,body: { password: string }, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/register/${id}/`,
+        path: `/register/${pk}/`, // Используем username вместо id
         method: "PUT",
         secure: true,
+        body,
         ...params,
       }),
   };
@@ -397,9 +400,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/rent-formed/{id}/
      * @secure
      */
-    updateStatus: (id: number, data: VmachineRequest, params: RequestParams = {}) =>
+    updateStatus: (data: VmachineRequest, params: RequestParams = {}) =>
       this.request<VmachineRequest, any>({
-        path: `/rent-formed/${id}/`,
+        path: `/rent-formed/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -425,6 +428,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
 
+    getListAll: (params: RequestParams = {}) =>
+      this.request<VmachineRequest[], any>({
+        path: `/rent-list-all/`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
     /**
      * No description
      *
@@ -433,10 +445,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/rent-list/{request_id}/
      * @secure
      */
-    rentListCreate: (requestId: string, data: VmachineRequestService, params: RequestParams = {}) =>
+    rentListCreate: (data: VmachineRequestService, params: RequestParams = {}) =>
       this.request<VmachineRequestService, any>({
-        path: `/rent-list/${requestId}/`,
+        path: `/rent-list1/`,
         method: "POST",
+        withCredentials: true,
         body: data,
         secure: true,
         format: "json",
@@ -608,9 +621,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/rental-list/{id}/
      * @secure
      */
-    rentalListUpdate: (id: number, data: VmachineRequest, params: RequestParams = {}) =>
+    rentalListUpdate: (data: VmachineRequest, params: RequestParams = {}) =>
       this.request<VmachineRequest, any>({
-        path: `/rental-list/${id}/`,
+        path: `/rental-list/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -626,9 +639,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/rental-list/{id}/
      * @secure
      */
-    rentalListDelete: (id: number, params: RequestParams = {}) =>
+    rentalListDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/rental-list/${id}/`,
+        path: `/rental-list/`,
         method: "DELETE",
         secure: true,
         ...params,
@@ -689,7 +702,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description Функция регистрации новых пользователей Если пользователя c указанным в request email ещё нет, в БД будет добавлен новый пользователь.
+     * @description Функция регистрации новых пользователей Если пользователя c указанным в request  ещё нет, в БД будет добавлен новый пользователь.
      *
      * @tags user
      * @name UserCreate

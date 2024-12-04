@@ -1,4 +1,3 @@
-import { dest_api } from "../../target_config"
 import { api } from '../api'
 
 export interface VMData {
@@ -33,29 +32,26 @@ const mockData: VMData[] = [
 
 export const fetchVMListFromApi = async (maxPrice: number): Promise<any> => {
     try {
-        // Вызов метода vmachinesList с передачей query-параметра vmachine_price
         const response = await api.vmachines.vmachinesList({
-            vmachine_price: maxPrice, // Параметр передается в функцию
+            vmachine_price: maxPrice, 
         });
         
-        return response.data?.vmachines || []; // Возвращаем полученные данные или пустой массив, если vmachines отсутствует
+        return response.data?.vmachines || []; 
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
-        return mockData.filter(vm => vm.price <= maxPrice); // Возвращаем mockData в случае ошибки
+        return mockData.filter(vm => vm.price <= maxPrice); 
     }
 };
 
 
-export const fetchVMByIdFromApi = async (id: number): Promise<VMData | undefined> => {
+export const fetchVMByIdFromApi = async (id: number): Promise<any | undefined> => {
     try {
-        const response = await fetch(`${dest_api}/vmachines/${id}/`); 
-        if (!response.ok) {
-            throw new Error('Сетевая ошибка');
-        }
-        const data: VMData = await response.json();
+        const response = await api.vmachines.vmachinesRead(id.toString()); 
+        const data: any = response.data; 
         return data;
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
+
         return mockData.find(vm => vm.id === id); 
     }
 };
