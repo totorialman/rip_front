@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { useFilter } from '../context/FilterContext';  // Импортируем хук
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import { useFilter } from '../context/FilterContext';  
 import PriceFilter from '../components/PriceFilter';
 import MachineCard from '../components/MachineCard';
 import { VMData, fetchVMListFromApi } from '../services/api';
 import '../App.css';
 
 const MachinesPage: React.FC = () => {
-    const { state} = useFilter(); // Получаем состояние и dispatch из контекста
-    const { maxPrice } = state; // Достаем maxPrice из состояния
+    const { state } = useFilter(); 
+    const { maxPrice } = state; 
     const [machines, setMachines] = useState<VMData[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true); 
 
     useEffect(() => {
         const loadMachines = async () => {
+            setIsLoading(true); 
             try {
                 const data = await fetchVMListFromApi(maxPrice);
                 if (Array.isArray(data)) {
@@ -22,10 +24,12 @@ const MachinesPage: React.FC = () => {
                 }
             } catch (error) {
                 console.error('Ошибка при загрузке машин:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
         loadMachines();
-    }, [maxPrice]); // Перезапуск загрузки при изменении maxPrice
+    }, [maxPrice]); 
 
     return (
         <Container>
@@ -36,7 +40,13 @@ const MachinesPage: React.FC = () => {
                 </Col>
             </Row>
             <Row className="machine-grid">
-                {machines.length > 0 ? (
+                {isLoading ? ( // Показываем спиннер, если данные загружаются
+                    <div className="d-flex justify-content-center my-5">
+                        <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Загрузка...</span>
+                        </Spinner>
+                    </div>
+                ) : machines.length > 0 ? (
                     machines.map(vm => (
                         <Col key={vm.id} xs={12} sm={6} lg={4} className="my-3">
                             <MachineCard vm={vm} />

@@ -1,48 +1,22 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../store/userSlice";
-import { api } from "../api";
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../store/store";
+import { loginUser } from "../store/userSlice";
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, error } = useSelector((state: RootState) => state.user);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setFeedback(null);
-
-        try {
-            const response = await api.login.loginCreate(
-                { username, password },
-                { credentials: "include" } // Указывает работу с куками
-            );
-
-            if (response.status === 200) {
-                const data: any = response.data;
-
-                if (data === "{'status': 'ok'}") {
-                    setFeedback({ type: "success", message: "Успешная авторизация!" });
-
-                    // Обновляем состояние Redux
-                    dispatch(loginSuccess(username));
-
-                    // Перенаправление на главную страницу
-                    navigate("/");
-                } else {
-                    throw new Error("Некорректный ответ сервера.");
-                }
-            } else {
-                throw new Error("Ошибка авторизации.");
-            }
-        } catch (err) {
-            console.error("Ошибка авторизации:", err);
-            setFeedback({ type: "error", message: "Неверные данные или сервер недоступен." });
+        const result = await dispatch(loginUser({ username, password }));
+        if (loginUser.fulfilled.match(result)) {
+            navigate("/");
         }
     };
 
@@ -73,11 +47,10 @@ const LoginPage: React.FC = () => {
                             />
                         </Form.Group>
 
-                        {feedback && (
-                            <Alert variant={feedback.type === "success" ? "success" : "danger"}>{feedback.message}</Alert>
-                        )}
+                        {error && <Alert variant="danger">{error}</Alert>}
+                        {loading && <Alert variant="info">Загрузка...</Alert>}
 
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" disabled={loading}>
                             Войти
                         </Button>
                     </Form>

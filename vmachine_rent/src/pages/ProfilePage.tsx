@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { api } from "../api";
-import { loginSuccess } from "../store/userSlice"; // Импортируем action для входа
+import { loginUser } from "../store/userSlice"; 
 
 const ProfilePage: React.FC = () => {
-    const username = useSelector((state: RootState) => state.user.username); // Получаем имя пользователя из состояния
+    const username = useSelector((state: RootState) => state.user.username); 
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -18,8 +18,8 @@ const ProfilePage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setFeedback(null); // Очистить feedback перед отправкой нового запроса
-        setError(null); // Очистка ошибок перед отправкой нового запроса
+        setFeedback(null); 
+        setError(null); 
 
         if (newPassword !== confirmPassword) {
             setError("Пароли не совпадают");
@@ -41,7 +41,6 @@ const ProfilePage: React.FC = () => {
                 throw new Error("CSRF-токен отсутствует.");
             }
 
-            // Отправка запроса на обновление пароля
             const response = await api.register.registerUpdate(username, { password: newPassword }, {
                 withCredentials: true,
                 headers: {
@@ -53,25 +52,13 @@ const ProfilePage: React.FC = () => {
                 setSuccess("Пароль успешно обновлен");
                 setError(null);
 
-                // Повторная авторизация с новым паролем
-                const loginResponse = await api.login.loginCreate(
-                    { username, password: newPassword },
-                    { credentials: "include" }
-                );
-
-                if (loginResponse.status === 200) {
-                    const data: any = loginResponse.data;
-
-                    if (data === "{'status': 'ok'}") {
-                        // Обновляем состояние Redux
-                        dispatch(loginSuccess(username));
-                        navigate("/"); // Перенаправляем на главную страницу
-                    } else {
-                        throw new Error("Ошибка при авторизации.");
-                    }
-                } else {
-                    throw new Error("Ошибка авторизации после обновления пароля.");
-                }
+                (dispatch as any)(loginUser({ username, password: newPassword }))
+                    .then(() => {
+                        navigate("/"); 
+                    })
+                    .catch(() => {
+                        setFeedback({ type: "error", message: "Ошибка авторизации после обновления пароля." });
+                    });
 
                 navigate("/profile");
             } else {
