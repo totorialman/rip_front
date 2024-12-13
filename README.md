@@ -11,3 +11,5 @@
 - [PWE (лаб 6)](https://github.com/totorialman/rip_front/tree/useContext%2C-useReducer)
 - [React, redux, auth (лаб 7)](https://github.com/totorialman/rip_front/tree/React-redux-auth)
 
+  # [GitHub Pages](https://totorialman.github.io/rip_front/machines).
+
