@@ -112,10 +112,6 @@ const CartPage: React.FC = () => {
   };
 
   const handleFormRequest = async () => {
-    console.log("fullName:", fullName);
-    console.log("email:", email);
-    console.log("fromDate:", fromDate);
-
     if (!fullName || !email || !fromDate) {
       alert("Пожалуйста, заполните все поля.");
       return;
@@ -175,6 +171,44 @@ const CartPage: React.FC = () => {
           <h2 className="text-center">Ваша текущая заявка</h2>
         </Col>
       </Row>
+  
+      {/* Форма сверху */}
+      <Row className="mt-3 justify-content-center">
+        <Col md={6}>
+          <Form>
+            <Form.Group>
+              <Form.Label>Полное имя</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Введите ваше полное имя"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mt-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Введите ваш email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mt-3">
+              <Form.Label>Дата начала аренды</Form.Label>
+              <Form.Control
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+  
+          
+          
+        </Col>
+      </Row>
+  
       {isCartEmpty ? (
         <p className="text-center">Заявка пуста.</p>
       ) : (
@@ -183,126 +217,92 @@ const CartPage: React.FC = () => {
             const rentItem = rent.find(item => item.service_id === vm.id);
             if (rentItem && rentItem.quantity > 0) {
               return (
-                <React.Fragment key={vm.id}>
-                    <Row className="mt-3 justify-content-center mb-5">
-  <Col md={3}>
-    <Form>
-      <Form.Group>
-        <Form.Label>Полное имя</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Введите ваше полное имя"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-      </Form.Group>
-      <Form.Group className="mt-3">
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          placeholder="Введите ваш email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Form.Group>
-      <Form.Group className="mt-3">
-        <Form.Label>Дата начала аренды</Form.Label>
-        <Form.Control
-          type="date"
-          value={fromDate}
-          onChange={(e) => setFromDate(e.target.value)}
-        />
-      </Form.Group>
-    </Form>
-  </Col>
-</Row>
-
-                  <Row className="py-3 w-75 align-items-center border-bottom">
-                    <Col xs={3} mt={10} className="text-center">
-                      {vm.url && <img src={vm.url} alt={vm.name} style={{ width: "100%" }} />}
-                    </Col>
-                    <Col xs={6}>
-                      <h5 className="mb-1">{vm.name}</h5>
-                      <p className="mb-1">Цена: {vm.price} ₽/мес</p>
-                    </Col>
-                    <Col xs={3} className="text-center">
-                      <div className="d-flex justify-content-center align-items-center">
-                        <Button
-                          variant="outline-secondary"
-                          size="sm"
-                          onClick={() => handleQuantityChange(vm.id, -1)}
-                        >
-                          −
-                        </Button>
-                        <span className="mx-2">
-                          {rentItem.quantity}
-                        </span>
-                        <Button
-                          variant="outline-secondary"
-                          size="sm"
-                          onClick={() => handleQuantityChange(vm.id, 1)}
-                        >
-                          +
-                        </Button>
-                      </div>
-                    </Col>
-                    
-                  </Row>
-                  <Row className="mt-4">
-        <Col md={12} className="text-end">
-          <h3>Общая сумма: {calculateTotalPrice(detailedVMachines, rent).toFixed(2)} ₽/мес</h3>
-        </Col>
-      </Row>
-                  <div className="d-flex justify-content-end">
-                    <Button
-                    variant="primary"
-                    className="mt-2"
-                    onClick={handleFormRequest}
-                        >
-                    Отправить заявку
-                     </Button>
-                </div>
-
-                </React.Fragment>
+                <Row key={vm.id} className="py-3 w-75 align-items-center border-bottom">
+                  <Col xs={3} className="text-center">
+                    {vm.url && <img src={vm.url} alt={vm.name} style={{ width: "100%" }} />}
+                  </Col>
+                  <Col xs={6}>
+                    <h5 className="mb-1">{vm.name}</h5>
+                    <p className="mb-1">Цена: {vm.price} ₽/мес</p>
+                  </Col>
+                  <Col xs={3} className="text-center">
+                    <div className="d-flex justify-content-center align-items-center">
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={() => handleQuantityChange(vm.id, -1)}
+                      >
+                        −
+                      </Button>
+                      <span className="mx-2">{rentItem.quantity}</span>
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={() => handleQuantityChange(vm.id, 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
               );
             }
-            return null; 
+            return null;
           })}
+          <Row className="mt-4">
+            <Col md={12} className="text-end">
+              <h3>Общая сумма: {calculateTotalPrice(detailedVMachines, rent).toFixed(2)} ₽/мес</h3>
+            </Col>
+            <div className="d-flex justify-content-end mt-3">
+            <Button
+              variant="primary"
+              onClick={handleFormRequest}
+            >
+              Отправить заявку
+            </Button>
+          </div>
+          <div className="d-flex justify-content-left">
+            <Button
+              variant="danger"
+              onClick={handleFormRequest}
+            >
+              Удалить заявку
+            </Button>
+          </div>
+          </Row>
         </Row>
       )}
-      
-
-      
-
+  
       <Row className="mt-5">
-      <Col md={12}>
-        <h3 className="text-center">Сформированные заявки</h3>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Полное имя</th>
-              <th>Email</th>
-              <th>Дата начала аренды</th>
-              <th>Статус</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requests.map((request) => (
-              request.rent.map((rentItem: any) => (
-                <tr key={rentItem.id}>
-                  <td>{rentItem.full_name || "Не указано"}</td>
-                  <td>{rentItem.email || "Не указано"}</td>
-                  <td>{rentItem.from_date ? new Date(rentItem.from_date).toLocaleDateString() : "Не указано"}</td>
-                  <td>{rentItem.status || "Не указано"}</td>
-                </tr>
-              ))
-            ))}
-          </tbody>
-        </Table>
-      </Col>
-    </Row>
+        <Col md={12}>
+          <h3 className="text-center">Сформированные заявки</h3>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Полное имя</th>
+                <th>Email</th>
+                <th>Дата начала аренды</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+            <tbody>
+              {requests.map((request) => (
+                request.rent.map((rentItem: any) => (
+                  <tr key={rentItem.id}>
+                    <td>{rentItem.full_name || "Не указано"}</td>
+                    <td>{rentItem.email || "Не указано"}</td>
+                    <td>{rentItem.from_date ? new Date(rentItem.from_date).toLocaleDateString() : "Не указано"}</td>
+                    <td>{rentItem.status || "Не указано"}</td>
+                  </tr>
+                ))
+              ))}
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
     </Container>
   );
+  
 };
 
 export default CartPage;
